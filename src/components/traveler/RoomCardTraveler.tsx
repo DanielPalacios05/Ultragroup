@@ -35,7 +35,7 @@ export function RoomCardTraveler({ room, onReserveClick }: RoomCardTravelerProps
                     </p>
 
                     <div className="mb-2">
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-xl border-2 border-slate-700 bg-white text-xs font-bold text-slate-800">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-800 border border-green-200 shadow-sm leading-none">
                             Disponible
                         </span>
                     </div>

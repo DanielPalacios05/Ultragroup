@@ -45,6 +45,14 @@ export default function HabitacionesPage({ params }: { params: Promise<{ id: str
         fetchData();
     }, [id]);
 
+    const handleReserveClick = (room: Room) => {
+        if (!startDate) {
+            alert("Por favor indique la fecha de llegada antes de reservar.");
+            return;
+        }
+        setSelectedRoom(room);
+    };
+
     const handleReserveConfirm = async () => {
         if (!selectedRoom || !user) return;
 
@@ -59,6 +67,7 @@ export default function HabitacionesPage({ params }: { params: Promise<{ id: str
             });
 
             setSelectedRoom(null);
+            alert("¡Reserva confirmada con éxito!");
             router.push('/viajero/dashboard');
 
         } catch (error) {
@@ -125,7 +134,7 @@ export default function HabitacionesPage({ params }: { params: Promise<{ id: str
                         <RoomCardTraveler
                             key={room.id}
                             room={room}
-                            onReserveClick={setSelectedRoom}
+                            onReserveClick={handleReserveClick}
                         />
                     ))}
                 </div>

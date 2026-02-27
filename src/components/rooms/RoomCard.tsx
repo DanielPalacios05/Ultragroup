@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { MoreVertical, Check, Power, Pencil } from "lucide-react";
 import { Room } from "@/domain/schemas/hotel.schema";
 import { updateRoom } from "@/actions/room.actions";
-import { cn } from "@/components/ui/RoleSwitcher";
+import { cn } from "@/lib/utils";
 
 interface RoomCardProps {
     room: Room;

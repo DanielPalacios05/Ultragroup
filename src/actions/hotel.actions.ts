@@ -11,7 +11,6 @@ export interface PaginatedResponse<T> {
 
 export async function getHotelById(id: string): Promise<Hotel> {
     try {
-        console.log("ID", id)
         const url = `${API_URL}/hotels/${id}`;
         const response = await fetch(url, {
             method: 'GET',

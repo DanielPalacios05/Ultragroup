@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { RoleSwitcher, type Role } from '@/components/ui/RoleSwitcher';
 import { Input } from '@/components/ui/Input';
 import { loginSchema, type LoginFormValues } from '@/domain/schemas/auth.schema';
 import { loginUser, setAuthCookie } from '@/actions/auth.actions';
@@ -18,7 +17,7 @@ export default function LoginPage() {
     const router = useRouter();
     const setAuth = useAuthStore((state) => state.login);
 
-    const [role, setRole] = useState<Role>('viajero');
+    const [role] = useState<'viajero' | 'agencia'>('viajero');
     const [serverError, setServerError] = useState<string | null>(null);
 
     const {
@@ -74,7 +73,9 @@ export default function LoginPage() {
                 </div>
 
                 <div className="w-full mb-8 flex justify-center">
-                    <RoleSwitcher role={role} onChange={setRole} />
+                    <div className="flex w-full items-center justify-center p-2 mb-2 bg-slate-50 text-slate-500 rounded-lg border border-slate-200 text-sm">
+                        Ingresando al portal
+                    </div>
                 </div>
 
                 {serverError && (

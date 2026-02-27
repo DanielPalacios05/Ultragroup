@@ -58,7 +58,6 @@ export async function getRoomsByHotel(hotelId: string, status?: string): Promise
 export async function createRoom(data: Omit<Room, 'id'>) {
     try {
         const url = `${API_URL}/rooms`;
-        console.log(data);
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -91,17 +90,4 @@ export async function updateRoom(id: string, data: Partial<Room>) {
     }
 }
 
-export async function deleteRoom(id: string) {
-    try {
-        const url = `${API_URL}/rooms/${id}`;
-        const response = await fetch(url, {
-            method: 'DELETE',
-        });
-
-        if (!response.ok) throw new Error('Falló al eliminar habitación');
-        return true;
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error de conexión');
-    }
-}
+// deleteRoom was removed as the requirement was exclusively "inhabilitar" (disabled status).

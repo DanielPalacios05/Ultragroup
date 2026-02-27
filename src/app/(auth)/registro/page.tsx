@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
-import { cn } from '@/components/ui/RoleSwitcher';
+import { cn } from '@/lib/utils';
 import { registroSchema, type RegistroFormValues } from '@/domain/schemas/auth.schema';
 import { registerUser } from '@/actions/auth.actions';
 import { useAuthStore } from '@/store/useAuthStore';

@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { cn } from "@/components/ui/RoleSwitcher";
+import { cn } from "@/lib/utils";
 
 interface DateRangeDisplayProps {
     startDate: string;

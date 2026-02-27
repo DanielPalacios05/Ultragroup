@@ -45,6 +45,13 @@ export function ReservationCard({ reservation, roomNumber, traveler, onClick }: 
                             </a>
                         ) : <span>N/A</span>}
                     </div>
+
+                    {/* Status Badge */}
+                    <div className="mt-3">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-green-100 text-green-800 border border-green-200 shadow-sm leading-none">
+                            Confirmada
+                        </span>
+                    </div>
                 </div>
             </div>
 

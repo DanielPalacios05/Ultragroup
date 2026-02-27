@@ -5,7 +5,7 @@ export const reservationSchema = z.object({
     hotelId: z.string(),
     roomId: z.string(),
     userId: z.string(),
-    startDate: z.string(), // Format "YYYY-MM-DD" expected from API/Form
+    startDate: z.string().min(1, 'Se requiere fecha de llegada'), // Format "YYYY-MM-DD" expected from API/Form
     endDate: z.string().optional().nullable(),
 });
 

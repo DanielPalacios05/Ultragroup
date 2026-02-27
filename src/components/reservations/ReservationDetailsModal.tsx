@@ -2,7 +2,7 @@ import { User } from '@/store/useAuthStore';
 import { Reservation } from '@/domain/schemas/reservation.schema';
 import { Room } from '@/domain/schemas/hotel.schema';
 import { Mail, Phone, X } from 'lucide-react';
-import { cn } from '@/components/ui/RoleSwitcher';
+import { cn } from '@/lib/utils';
 import { DateRangeDisplay } from '@/components/ui/DateRangeDisplay';
 
 interface ReservationDetailsModalProps {
@@ -24,21 +24,11 @@ export function ReservationDetailsModal({ reservation, room, traveler, onClose }
     };
 
     const getStatusText = () => {
-        switch (room.status) {
-            case 'available': return 'Disponible';
-            case 'reserved': return 'Reservada';
-            case 'disabled': return 'Inhabilitada';
-            default: return 'Desconocido';
-        }
+        return 'Confirmada';
     };
 
     const getStatusStyle = () => {
-        switch (room.status) {
-            case 'available': return 'bg-green-100 text-green-800';
-            case 'reserved': return 'bg-blue-100 text-blue-800';
-            case 'disabled': return 'bg-red-100 text-red-800';
-            default: return 'bg-gray-100 text-gray-800';
-        }
+        return 'bg-green-100 text-green-800';
     };
 
     return (

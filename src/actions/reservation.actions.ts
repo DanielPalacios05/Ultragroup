@@ -1,6 +1,6 @@
 "use server"
 
-import { Reservation, ReservationFormData } from '@/domain/schemas/reservation.schema';
+import { Reservation, ReservationFormData, reservationSchema } from '@/domain/schemas/reservation.schema';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -24,12 +24,14 @@ export async function getReservationsByHotel(hotelId: string): Promise<Reservati
 
 export async function createReservation(reservation: ReservationFormData): Promise<Reservation> {
     try {
+        const payload = reservationSchema.omit({ id: true }).parse(reservation);
+
         const response = await fetch(`${API_URL}/reservations`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(reservation),
+            body: JSON.stringify(payload),
         });
 
         if (!response.ok) {

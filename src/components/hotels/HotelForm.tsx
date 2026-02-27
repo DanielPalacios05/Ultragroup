@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
-import { cn } from '@/components/ui/RoleSwitcher';
+import { cn } from '@/lib/utils';
 import { hotelFormSchema, type Hotel, type HotelFormData } from '@/domain/schemas/hotel.schema';
 
 interface HotelFormProps {
