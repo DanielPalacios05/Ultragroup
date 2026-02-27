@@ -3,7 +3,7 @@
 import { RegistroFormValues } from '@/domain/schemas/auth.schema';
 import { cookies } from 'next/headers';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export async function setAuthCookie(token: string) {
     const cookieStore = await cookies();

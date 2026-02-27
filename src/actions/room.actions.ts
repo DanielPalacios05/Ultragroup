@@ -2,7 +2,7 @@
 
 import { Room } from '@/domain/schemas/hotel.schema';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export async function getRooms(hotelId: string, status?: string): Promise<Room[]> {
     try {

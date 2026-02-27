@@ -2,7 +2,7 @@
 
 import { Reservation, ReservationFormData } from '@/domain/schemas/reservation.schema';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export async function getReservationsByHotel(hotelId: string): Promise<Reservation[]> {
     try {
