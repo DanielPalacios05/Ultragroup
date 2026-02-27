@@ -78,3 +78,21 @@ export async function loginUser(data: { email: string; password: string; role: s
         throw error;
     }
 }
+
+export async function getUserById(userId: string) {
+    try {
+        const response = await fetch(`${API_URL}/users/${userId}`, {
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            throw new Error(`User fetching error: ${response.statusText}`);
+        }
+
+        const user = await response.json();
+        return user;
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        return null; // Return null instead of crashing for soft mapping
+    }
+}

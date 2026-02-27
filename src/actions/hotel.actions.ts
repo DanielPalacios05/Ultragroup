@@ -9,6 +9,32 @@ export interface PaginatedResponse<T> {
     totalCount: number;
 }
 
+export async function getHotelById(id: string): Promise<Hotel> {
+    try {
+        console.log("ID", id)
+        const url = `${API_URL}/hotels/${id}`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            // Important to skip cache for dynamic dashboard data
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error fetching hotel: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error('Error in getHotelById action:', error);
+        throw new Error('Error al conectar con la base de datos de hoteles');
+    }
+}
+
 export async function getHoteles(
     searchQuery?: string
 ): Promise<PaginatedResponse<Hotel>> {
@@ -21,7 +47,7 @@ export async function getHoteles(
         if (searchQuery) {
             // Since mockoon strictly matches filters like _eq or _like
             // Let's use name_like to search by name in a simple approximation
-            url += `?name_like=${encodeURIComponent(searchQuery)}`;
+            url += `?search=${encodeURIComponent(searchQuery)}`;
         }
 
         const response = await fetch(url, {
@@ -53,7 +79,7 @@ export async function getHoteles(
     }
 }
 
-export async function createHotel(data: Hotel) {
+export async function createHotel(data: Omit<Hotel, 'id'>) {
     try {
         const url = `${API_URL}/hotels`;
         const response = await fetch(url, {
@@ -115,4 +141,28 @@ export async function toggleHotelStatus(id: string, currentStatus: string) {
     }
 }
 
+export async function searchHotelsByCity(city: string): Promise<Hotel[]> {
+    try {
+        if (!city || city.trim() === '') return [];
+
+        const url = `${API_URL}/hotels?city_like=${encodeURIComponent(city)}&status_eq=enabled`;
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            cache: 'no-store'
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error searching hotels: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error in searchHotelsByCity action:', error);
+        return [];
+    }
+}
 

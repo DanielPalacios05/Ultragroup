@@ -8,7 +8,8 @@ export function proxy(request: NextRequest) {
     // Protect /viajero and /agencia routes
     if (
         request.nextUrl.pathname.startsWith('/viajero') ||
-        request.nextUrl.pathname.startsWith('/agencia')
+        request.nextUrl.pathname.startsWith('/agencia') 
+        
     ) {
         if (!token) {
             return NextResponse.redirect(new URL('/login', request.url));

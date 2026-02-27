@@ -64,29 +64,29 @@ export default function SignupPage() {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 text-black">
                     <Input
-                        id="nombre"
+                        id="name"
                         label="Nombre completo"
                         placeholder="John Doe"
-                        {...register('nombre')}
-                        error={errors.nombre?.message}
+                        {...register('name')}
+                        error={errors.name?.message}
                     />
 
                     <Input
-                        id="fechaNacimiento"
+                        id="dob"
                         type="date"
                         label="Fecha de nacimiento"
-                        {...register('fechaNacimiento')}
-                        error={errors.fechaNacimiento?.message}
+                        {...register('dob')}
+                        error={errors.dob?.message}
                     />
 
                     <div className="flex w-full flex-col gap-1.5">
-                        <label htmlFor="genero" className="text-sm font-medium text-gray-700">Género</label>
+                        <label htmlFor="gender" className="text-sm font-medium text-gray-700">Género</label>
                         <select
-                            id="genero"
-                            {...register('genero')}
+                            id="gender"
+                            {...register('gender')}
                             className={cn(
                                 "flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent",
-                                errors.genero && "border-red-500 focus:ring-red-500"
+                                errors.gender && "border-red-500 focus:ring-red-500"
                             )}
                         >
                             <option value="">Seleccionar...</option>
@@ -94,17 +94,17 @@ export default function SignupPage() {
                             <option value="Femenino">Femenino</option>
                             <option value="Otro">Otro</option>
                         </select>
-                        {errors.genero && <p className="text-xs text-red-500">{errors.genero.message}</p>}
+                        {errors.gender && <p className="text-xs text-red-500">{errors.gender.message}</p>}
                     </div>
 
                     <div className="flex w-full flex-col gap-1.5">
-                        <label htmlFor="tipoDocumento" className="text-sm font-medium text-gray-700">Tipo de documento</label>
+                        <label htmlFor="documentType" className="text-sm font-medium text-gray-700">Tipo de documento</label>
                         <select
-                            id="tipoDocumento"
-                            {...register('tipoDocumento')}
+                            id="documentType"
+                            {...register('documentType')}
                             className={cn(
                                 "flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent",
-                                errors.tipoDocumento && "border-red-500 focus:ring-red-500"
+                                errors.documentType && "border-red-500 focus:ring-red-500"
                             )}
                         >
                             <option value="">Seleccionar...</option>
@@ -113,24 +113,24 @@ export default function SignupPage() {
                             <option value="PASAPORTE">Pasaporte</option>
                             <option value="CE">Cédula de extranjería</option>
                         </select>
-                        {errors.tipoDocumento && <p className="text-xs text-red-500">{errors.tipoDocumento.message}</p>}
+                        {errors.documentType && <p className="text-xs text-red-500">{errors.documentType.message}</p>}
                     </div>
 
                     <Input
-                        id="numeroDocumento"
+                        id="documentNumber"
                         label="Número de documento"
                         placeholder="123456789"
-                        {...register('numeroDocumento')}
-                        error={errors.numeroDocumento?.message}
+                        {...register('documentNumber')}
+                        error={errors.documentNumber?.message}
                     />
 
                     <Input
-                        id="telefono"
+                        id="phone"
                         type="tel"
                         label="Teléfono"
                         placeholder="300 123 4567"
-                        {...register('telefono')}
-                        error={errors.telefono?.message}
+                        {...register('phone')}
+                        error={errors.phone?.message}
                     />
 
                     <div className="md:col-span-2">

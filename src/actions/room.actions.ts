@@ -1,12 +1,16 @@
 'use server';
 
-import { Room, RoomType } from '@/domain/schemas/hotel.schema';
+import { Room } from '@/domain/schemas/hotel.schema';
 
 const API_URL = 'http://localhost:3001/api';
 
-export async function getRooms(hotelId: string): Promise<Room[]> {
+export async function getRooms(hotelId: string, status?: string): Promise<Room[]> {
     try {
-        const url = `${API_URL}/rooms?hotelId=${hotelId}`;
+        let url = `${API_URL}/rooms?hotelId_eq=${hotelId}`;
+        if (status && status !== 'all') {
+            url += `&status_eq=${status}`;
+        }
+
         const response = await fetch(url, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
@@ -24,29 +28,37 @@ export async function getRooms(hotelId: string): Promise<Room[]> {
     }
 }
 
-export async function getRoomTypes(hotelId: string): Promise<RoomType[]> {
+export async function getRoomsByHotel(hotelId: string, status?: string): Promise<Room[]> {
     try {
-        const url = `${API_URL}/roomtypes?hotelId=${hotelId}`;
+        let url = `${API_URL}/rooms?hotelId_eq=${hotelId}`;
+        if (status) {
+            url += `&status_eq=${status}`;
+        }
+
         const response = await fetch(url, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+            },
             cache: 'no-store'
         });
 
         if (!response.ok) {
-            throw new Error('Error al obtener tipos de habitación');
+            throw new Error(`Error fetching rooms: ${response.statusText}`);
         }
 
-        return await response.json();
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error(error);
-        throw new Error('No se conectó al API de RoomTypes');
+        console.error('Error in getRoomsByHotel action:', error);
+        return [];
     }
 }
 
 export async function createRoom(data: Omit<Room, 'id'>) {
     try {
         const url = `${API_URL}/rooms`;
+        console.log(data);
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

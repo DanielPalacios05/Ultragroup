@@ -44,7 +44,7 @@ export default function AgenciaDashboard() {
         <div className="w-full flex-col flex animate-in fade-in duration-500 text-black">
             {/* Header section as shown in sketch */}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-extrabold text-gray-900 font-mono tracking-tight text-blue-400">
+                <h1 className="text-3xl font-extrabold text-brand  font-mono tracking-tight text-blue-400">
                     Hoteles
                 </h1>
                 <Link

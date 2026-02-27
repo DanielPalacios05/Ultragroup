@@ -134,24 +134,6 @@ export function HotelCard({ hotel, onUpdate }: HotelCardProps) {
                     </p>
                 </div>
 
-                {/* Rooms Info Footer */}
-                <div className="mt-auto space-y-1.5 pt-4 border-t border-gray-100">
-                    <div className="flex justify-between items-center text-sm text-gray-600 mb-2">
-                        <span>Total habitaciones</span>
-                        <span className="font-bold text-gray-900">{hotel.roomsAmount}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-gray-600 mb-4">
-                        <span>Disponibles</span>
-                        <span className="font-bold text-brand">{hotel.roomsAvailable}</span>
-                    </div>
-
-                    <button
-                        onClick={() => router.push(`/agencia/dashboard/hoteles/${hotel.id}/habitaciones`)}
-                        className="w-full bg-brand text-white py-2 rounded-md font-medium text-sm hover:bg-black transition-colors"
-                    >
-                        Ver Habitaciones
-                    </button>
-                </div>
             </div>
         </div>
     );

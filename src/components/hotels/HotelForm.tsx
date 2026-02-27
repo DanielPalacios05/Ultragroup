@@ -6,11 +6,11 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/components/ui/RoleSwitcher';
-import { hotelSchema, type Hotel } from '@/domain/schemas/hotel.schema';
+import { hotelFormSchema, type Hotel, type HotelFormData } from '@/domain/schemas/hotel.schema';
 
 interface HotelFormProps {
     initialData?: Hotel;
-    onSubmitAction: (data: Hotel) => Promise<void>;
+    onSubmitAction: (data: HotelFormData) => Promise<void>;
     submitLabel: string;
 }
 
@@ -22,29 +22,27 @@ export function HotelForm({ initialData, onSubmitAction, submitLabel }: HotelFor
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<Hotel>({
-        resolver: zodResolver(hotelSchema),
-        defaultValues: initialData || {
-            // Provide sensible defaults for new hotels based on schema
-            id: `new-hotel`,
+    } = useForm<HotelFormData>({
+        resolver: zodResolver(hotelFormSchema),
+        defaultValues: initialData ? {
+            name: initialData.name,
+            city: initialData.city,
+            address: initialData.address,
+            status: initialData.status
+        } : {
             name: '',
             city: '',
-            searchCity: '',
             address: '',
-            roomsAmount: 0,
-            roomsAvailable: 0,
             status: 'enabled'
         }
     });
 
-    const onSubmit = async (data: Hotel) => {
+    const onSubmit = async (data: HotelFormData) => {
         try {
             setServerError(null);
 
-            // Auto-sync searchCity based on the city for Mockoon exact matching
             const submissionData = {
                 ...data,
-                searchCity: data.city.toLowerCase().trim()
             };
 
             await onSubmitAction(submissionData);
@@ -90,13 +88,6 @@ export function HotelForm({ initialData, onSubmitAction, submitLabel }: HotelFor
                     />
                 </div>
 
-                <Input
-                    id="roomsAmount"
-                    type="number"
-                    label="Total de Habitaciones"
-                    {...register('roomsAmount', { valueAsNumber: true })}
-                    error={errors.roomsAmount?.message}
-                />
 
                 <div className="flex w-full flex-col gap-1.5">
                     <label htmlFor="status" className="text-sm font-medium text-gray-700">Estado inicial</label>

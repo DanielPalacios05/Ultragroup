@@ -6,17 +6,17 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
 import { cn } from '@/components/ui/RoleSwitcher';
-import { roomSchema, type Room, type RoomType } from '@/domain/schemas/hotel.schema';
+import { roomFormSchema, type Room, type RoomFormData } from '@/domain/schemas/hotel.schema';
+import { getRoomsByHotel } from '@/actions/room.actions';
 
 interface RoomFormProps {
     initialData?: Room;
-    roomTypes: RoomType[];
     hotelId: string;
     onSubmitAction: (data: Omit<Room, 'id'>) => Promise<void>;
     submitLabel: string;
 }
 
-export function RoomForm({ initialData, roomTypes, hotelId, onSubmitAction, submitLabel }: RoomFormProps) {
+export function RoomForm({ initialData, hotelId, onSubmitAction, submitLabel }: RoomFormProps) {
     const router = useRouter();
     const [serverError, setServerError] = useState<string | null>(null);
 
@@ -24,28 +24,36 @@ export function RoomForm({ initialData, roomTypes, hotelId, onSubmitAction, subm
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<Room>({
-        resolver: zodResolver(roomSchema),
+    } = useForm<RoomFormData>({
+        resolver: zodResolver(roomFormSchema),
         defaultValues: initialData || {
-            id: 'new-room',
             hotelId: hotelId,
-            roomTypeId: roomTypes[0]?.id || '',
-            costoBase: 0,
-            impuestos: 0,
-            ubicacion: '',
-            status: 'active'
+            roomNumber: '',
+            roomType: '',
+            baseCost: 0,
+            taxes: 0,
+            location: '',
+            status: 'available'
         }
     });
 
-    const onSubmit = async (data: Room) => {
+    const onSubmit = async (data: RoomFormData) => {
         try {
             setServerError(null);
 
-            // Exclude 'id' for submission logic if needed, Mockoon accepts without it on POST
-            // But we pass the validated data directly to the action
-            await onSubmitAction(data);
+            // Fetch rooms to validate duplicate code
+            const currentRooms = await getRoomsByHotel(hotelId);
+            const isDuplicate = currentRooms.some(room =>
+                room.roomNumber === data.roomNumber && room.id !== initialData?.id
+            );
 
-            router.push(`/agencia/dashboard/hoteles/${hotelId}/habitaciones`);
+            if (isDuplicate) {
+                setServerError('Ya existe una habitación con este código/número en el hotel.');
+                return;
+            }
+
+            await onSubmitAction(data as Omit<Room, 'id'>);
+            router.push(`/agencia/dashboard/hoteles/${hotelId}/editar`);
             router.refresh();
         } catch (error: unknown) {
             setServerError(error instanceof Error ? error.message : 'Error procesando el formulario');
@@ -61,51 +69,52 @@ export function RoomForm({ initialData, roomTypes, hotelId, onSubmitAction, subm
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                {/* Oculto: el hotelId debe enviarse siempre */}
                 <input type="hidden" {...register('hotelId')} value={hotelId} />
 
-                <div className="flex w-full flex-col gap-1.5 md:col-span-2">
-                    <label htmlFor="roomTypeId" className="text-sm font-medium text-gray-700">Tipo de Habitación</label>
-                    <select
-                        id="roomTypeId"
-                        {...register('roomTypeId')}
-                        className={cn(
-                            "flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent",
-                            errors.roomTypeId && "border-red-500 focus:ring-red-500"
-                        )}
-                    >
-                        <option value="">Seleccione un tipo...</option>
-                        {roomTypes.map(rt => (
-                            <option key={rt.id} value={rt.id}>{rt.name} - {rt.description}</option>
-                        ))}
-                    </select>
-                    {errors.roomTypeId && <p className="text-xs text-red-500">{errors.roomTypeId.message}</p>}
+                <div className="md:col-span-1">
+                    <Input
+                        id="roomNumber"
+                        label="Número de Habitación"
+                        placeholder="Ej. 101, A2"
+                        maxLength={3}
+                        {...register('roomNumber')}
+                        error={errors.roomNumber?.message}
+                    />
+                </div>
+
+                <div className="md:col-span-1">
+                    <Input
+                        id="roomType"
+                        label="Tipo de Habitación"
+                        placeholder="Ej. Sencilla, Doble, Suite"
+                        {...register('roomType')}
+                        error={errors.roomType?.message}
+                    />
                 </div>
 
                 <Input
-                    id="costoBase"
+                    id="baseCost"
                     type="number"
                     label="Costo Base (COP)"
-                    {...register('costoBase', { valueAsNumber: true })}
-                    error={errors.costoBase?.message}
+                    {...register('baseCost', { valueAsNumber: true })}
+                    error={errors.baseCost?.message}
                 />
 
                 <Input
-                    id="impuestos"
+                    id="taxes"
                     type="number"
                     label="Impuestos (COP)"
-                    {...register('impuestos', { valueAsNumber: true })}
-                    error={errors.impuestos?.message}
+                    {...register('taxes', { valueAsNumber: true })}
+                    error={errors.taxes?.message}
                 />
 
                 <div className="md:col-span-2">
                     <Input
-                        id="ubicacion"
+                        id="location"
                         label="Ubicación Física"
                         placeholder="Ej. Piso 5, Torre A"
-                        {...register('ubicacion')}
-                        error={errors.ubicacion?.message}
+                        {...register('location')}
+                        error={errors.location?.message}
                     />
                 </div>
 
@@ -119,8 +128,7 @@ export function RoomForm({ initialData, roomTypes, hotelId, onSubmitAction, subm
                             errors.status && "border-red-500 focus:ring-red-500"
                         )}
                     >
-                        <option value="active">Activa</option>
-                        <option value="maintenance">Ocupada / Mantenimiento</option>
+                        <option value="available">Disponible</option>
                         <option value="disabled">Inhabilitada</option>
                     </select>
                     {errors.status && <p className="text-xs text-red-500">{errors.status.message}</p>}

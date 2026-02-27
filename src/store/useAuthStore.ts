@@ -5,6 +5,12 @@ export interface User {
     id: string;
     email: string;
     role: 'VIAJERO' | 'AGENCIA';
+    name?: string;
+    dob?: string;
+    gender?: string;
+    documentType?: string;
+    documentNumber?: string;
+    phone?: string;
 }
 
 interface AuthState {
