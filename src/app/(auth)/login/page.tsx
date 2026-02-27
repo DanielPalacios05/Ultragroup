@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { loginSchema, type LoginFormValues } from '@/domain/schemas/auth.schema';
 import { loginUser, setAuthCookie } from '@/actions/auth.actions';
 import { useAuthStore } from '@/store/useAuthStore';
+import { RoleSwitcher, type Role } from '@/components/ui/RoleSwitcher';
 
 // In this simplified Mockoon implementation, we rely purely on email+pass to find the user.
 // The role switcher here acts as UI dressing, though we could enforce that the fetched user.role matches the switcher role.
@@ -17,7 +18,7 @@ export default function LoginPage() {
     const router = useRouter();
     const setAuth = useAuthStore((state) => state.login);
 
-    const [role] = useState<'viajero' | 'agencia'>('viajero');
+    const [role, setRole] = useState<Role>('viajero');
     const [serverError, setServerError] = useState<string | null>(null);
 
     const {
@@ -73,9 +74,7 @@ export default function LoginPage() {
                 </div>
 
                 <div className="w-full mb-8 flex justify-center">
-                    <div className="flex w-full items-center justify-center p-2 mb-2 bg-slate-50 text-slate-500 rounded-lg border border-slate-200 text-sm">
-                        Ingresando al portal
-                    </div>
+                    <RoleSwitcher role={role} onChange={setRole} />
                 </div>
 
                 {serverError && (
